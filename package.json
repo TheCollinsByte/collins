@@ -6,7 +6,6 @@
   "repository": "git@github.com:CollinsByte/Portfolio.git",
   "author": "Collins <collin@collindigm.com>",
   "license": "MIT",
-
   "devDependencies": {
     "gulp": "^5.0.0",
     "gulp-plumber": "^1.2.1",
