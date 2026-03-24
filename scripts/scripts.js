@@ -1,151 +1,169 @@
-var TxtType = function(el, toRotate, period) {
-    this.toRotate = toRotate;
-    this.el = el;
-    this.loopNum = 0;
-    this.period = parseInt(period, 10) || 2000;
-    this.txt = '';
-    this.tick();
-    this.isDeleting = false;
-};
+document.addEventListener('DOMContentLoaded', () => {
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle?.querySelector('i');
+  
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const defaultTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+  
+  if (defaultTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (themeIcon) themeIcon.classList.replace('fa-moon', 'fa-sun');
+  }
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      if (newTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        if (themeIcon) themeIcon.classList.replace('fa-moon', 'fa-sun');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeIcon) themeIcon.classList.replace('fa-sun', 'fa-moon');
+      }
+      
+      localStorage.setItem('theme', newTheme);
+    });
+  }
 
-TxtType.prototype.tick = function() {
-    var i = this.loopNum % this.toRotate.length;
-    var fullTxt = this.toRotate[i];
-
-    if (this.isDeleting) {
-        this.txt = fullTxt.substring(0, this.txt.length - 1);
-    } else {
-        this.txt = fullTxt.substring(0, this.txt.length + 1);
-    }
-
-    this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-    var that = this;
-    var delta = 150 - Math.random() * 100;
-
-    if (this.isDeleting) {
-        delta /= 2;
-    }
-
-    if (!this.isDeleting && this.txt === fullTxt) {
-        delta = this.period;
-        this.isDeleting = true;
-    } else if (this.isDeleting && this.txt === '') {
-        this.isDeleting = false;
-        this.loopNum++;
+  const typewriter = document.querySelectorAll('.typewriter');
+  
+  typewriter.forEach(el => {
+    const toRotate = JSON.parse(el.getAttribute('data-type'));
+    const period = parseInt(el.getAttribute('data-period'), 10) || 2000;
+    let loopNum = 0;
+    let txt = '';
+    let isDeleting = false;
+    
+    function tick() {
+      const i = loopNum % toRotate.length;
+      const fullTxt = toRotate[i];
+      
+      if (isDeleting) {
+        txt = fullTxt.substring(0, txt.length - 1);
+      } else {
+        txt = fullTxt.substring(0, txt.length + 1);
+      }
+      
+      el.innerHTML = '<span class="wrap">' + txt + '</span>';
+      
+      let delta = 150 - Math.random() * 100;
+      if (isDeleting) delta /= 2;
+      
+      if (!isDeleting && txt === fullTxt) {
+        delta = period;
+        isDeleting = true;
+      } else if (isDeleting && txt === '') {
+        isDeleting = false;
+        loopNum++;
         delta = 500;
+      }
+      
+      setTimeout(tick, delta);
     }
+    
+    tick();
+  });
 
-    setTimeout(function() {
-        that.tick();
-    }, delta);
-};
+  const style = document.createElement('style');
+  style.textContent = '.typewriter > .wrap { border-right: 0.1em solid #1688f0; }';
+  document.head.appendChild(style);
 
-window.onload = function() {
-    var elements = document.getElementsByClassName('typewriter');
-    for (var i = 0; i < elements.length; i++) {
-        var toRotate = elements[i].getAttribute('data-type');
-        var period = elements[i].getAttribute('data-period');
-        if (toRotate) {
-            new TxtType(elements[i], JSON.parse(toRotate), period);
-        }
-    }
-    // INJECT CSS
-    var css = document.createElement('style');
-    css.type = 'text/css';
-    css.innerHTML = '.typewriter > .wrap { border-right: 0.1em solid #1688f0}';
-    document.body.appendChild(css);
-};
+  document.querySelector('html').classList.remove('no-js');
 
-(function($) {
-    // Remove no-js class
-    $('html').removeClass('no-js');
+  document.querySelectorAll('header a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (link.classList.contains('no-scroll')) return;
+      
+      e.preventDefault();
+      const heading = link.getAttribute('href');
+      const target = document.querySelector(heading);
+      if (!target) return;
+      
+      const scrollDistance = target.offsetTop;
+      
+      window.scrollTo({
+        top: scrollDistance,
+        behavior: 'smooth'
+      });
 
-    // Animate to section when nav is clicked
-    $('header a').click(function(e) {
-        // Treat as normal link if no-scroll class
-        if ($(this).hasClass('no-scroll')) return;
-
-        e.preventDefault();
-        var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
-
-        $('html, body').animate(
-            {
-                scrollTop: scrollDistance + 'px'
-            },
-            Math.abs(window.pageYOffset - $(heading).offset().top) / 1
-        );
-
-        // Hide the menu once clicked if mobile
-        if ($('header').hasClass('active')) {
-            $('header, body').removeClass('active');
-        }
+      if (document.querySelector('header').classList.contains('active')) {
+        document.querySelector('header').classList.remove('active');
+        document.body.classList.remove('active');
+      }
     });
+  });
 
-    // Scroll to top
-    $('#to-top').click(function() {
-        $('html, body').animate(
-            {
-                scrollTop: 0
-            },
-            500
-        );
+  const toTop = document.getElementById('to-top');
+  if (toTop) {
+    toTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+  }
 
-    // Scroll to first element
-    $('#lead-down span').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate(
-            {
-                scrollTop: scrollDistance + 'px'
-            },
-            500
-        );
-    });
-
-    // Create timeline
-    $('#experience-timeline').each(function() {
-        $this = $(this); // Store reference to this
-        $userContent = $this.children('div'); // user content
-
-        // Create each timeline block
-        $userContent.each(function() {
-            $(this)
-                .addClass('vtimeline-content')
-                .wrap(
-                    '<div class="vtimeline-point"><div class="vtimeline-block"></div></div>'
-                );
+  const leadDown = document.getElementById('lead-down');
+  if (leadDown) {
+    leadDown.querySelector('span').addEventListener('click', () => {
+      const lead = document.getElementById('lead');
+      const nextSection = lead.nextElementSibling;
+      if (nextSection) {
+        window.scrollTo({
+          top: nextSection.offsetTop,
+          behavior: 'smooth'
         });
+      }
+    });
+  }
 
-        // Add icons to each block
-        $this.find('.vtimeline-point').each(function() {
-            $(this).prepend(
-                '<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>'
-            );
-        });
-
-        // Add dates to the timeline if exists
-        $this.find('.vtimeline-content').each(function() {
-            var date = $(this).data('date');
-            if (date) {
-                // Prepend if exists
-                $(this)
-                    .parent()
-                    .prepend(
-                        '<span class="vtimeline-date">' + date + '</span>'
-                    );
-            }
-        });
+  const timeline = document.getElementById('experience-timeline');
+  if (timeline) {
+    const userContent = timeline.querySelectorAll(':scope > div');
+    
+    userContent.forEach(content => {
+      content.classList.add('vtimeline-content');
+      
+      const wrapper = document.createElement('div');
+      wrapper.className = 'vtimeline-point';
+      wrapper.innerHTML = '<div class="vtimeline-block"></div>';
+      content.parentNode.insertBefore(wrapper, content);
+      wrapper.appendChild(content);
     });
 
-    // Open mobile menu
-    $('#mobile-menu-open').click(function() {
-        $('header, body').addClass('active');
+    timeline.querySelectorAll('.vtimeline-point').forEach(point => {
+      const icon = document.createElement('div');
+      icon.className = 'vtimeline-icon';
+      icon.innerHTML = '<i class="fa fa-map-marker"></i>';
+      point.prepend(icon);
     });
 
-    // Close mobile menu
-    $('#mobile-menu-close').click(function() {
-        $('header, body').removeClass('active');
+    timeline.querySelectorAll('.vtimeline-content').forEach(content => {
+      const date = content.getAttribute('data-date');
+      if (date) {
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'vtimeline-date';
+        dateSpan.textContent = date;
+        const point = content.closest('.vtimeline-point');
+        if (point) point.prepend(dateSpan);
+      }
     });
-})(jQuery);
+  }
+
+  const mobileMenuOpen = document.getElementById('mobile-menu-open');
+  if (mobileMenuOpen) {
+    mobileMenuOpen.addEventListener('click', () => {
+      document.querySelector('header').classList.add('active');
+      document.body.classList.add('active');
+    });
+  }
+
+  const mobileMenuClose = document.getElementById('mobile-menu-close');
+  if (mobileMenuClose) {
+    mobileMenuClose.addEventListener('click', () => {
+      document.querySelector('header').classList.remove('active');
+      document.body.classList.remove('active');
+    });
+  }
+});
