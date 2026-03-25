@@ -14,5 +14,8 @@
     "gulp-uglify": "^3.0.2",
     "gulp-wait": "^0.0.2",
     "sass": "^1.44.0"
+  },
+  "resolutions": {
+    "immutable": "^5.1.5"
   }
 }
