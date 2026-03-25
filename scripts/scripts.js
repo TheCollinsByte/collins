@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const style = document.createElement('style');
-  style.textContent = '.typewriter > .wrap { border-right: 0.1em solid #1688f0; }';
+  style.textContent = '.typewriter > .wrap { border-right: 2px solid #1688f0; animation: blink 0.8s infinite; } @keyframes blink { 50% { border-color: transparent; } }';
   document.head.appendChild(style);
 
   document.querySelector('html').classList.remove('no-js');
