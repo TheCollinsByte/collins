@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Page not found - Collins Portfolio" />
+    <title>404 - Page Not Found | Collins</title>
+    <link rel="icon" href="images/favicon.ico" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap"
+    />
+    <style>
+      :root {
+        --base-color: #1688f0;
+        --background: #000000;
+        --text: #dedede;
+        --heading: #efefef;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --background: #ffffff;
+          --text: #74808a;
+          --heading: #374054;
+        }
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Lato", sans-serif;
+        background: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+      }
+      .error-code {
+        font-size: 8rem;
+        font-weight: 900;
+        color: var(--base-color);
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+      h1 {
+        font-size: 2rem;
+        color: var(--heading);
+        margin-bottom: 20px;
+      }
+      p {
+        font-size: 1.1rem;
+        max-width: 400px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+      a {
+        color: var(--base-color);
+        text-decoration: none;
+        font-weight: 700;
+        padding: 12px 24px;
+        border: 2px solid var(--base-color);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+      a:hover {
+        background: var(--base-color);
+        color: #fff;
+      }
+      @media (max-width: 600px) {
+        .error-code {
+          font-size: 6rem;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-code">404</div>
+    <h1>Page Not Found</h1>
+    <p>Oops! The page you're looking for seems to have wandered off into the digital wilderness.</p>
+    <a href="/">← Back to Home</a>
+  </body>
+</html>
