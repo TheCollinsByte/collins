@@ -86,6 +86,8 @@
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <button id="theme-toggle" class="shadow-large" aria-label="Toggle dark/light theme">
       <i class="fa fa-moon" aria-hidden="true"></i>
     </button>
@@ -134,9 +136,10 @@
       </header>
     </nav>
 
-    <section id="lead">
+    <section id="lead" role="main">
+      <a id="main-content" class="visually-hidden">Main Content</a>
       <div id="lead-content">
-        <img id="me" src="https://avatars.githubusercontent.com/u/85203667?v=4" alt="Collins Software Engineer" class="fade-in" />
+        <img id="me" src="https://avatars.githubusercontent.com/u/85203667?v=4" alt="Collins Software Engineer" class="fade-in" loading="lazy" />
         <h1 class="fade-in delay-1">Collins</h1>
         <p class="title fade-in delay-2">Software Engineer</p>
         <h2 class="fade-in delay-3">
