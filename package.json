@@ -16,6 +16,6 @@
     "sass": "^1.44.0"
   },
   "resolutions": {
-    "immutable": "^5.1.5"
+    "immutable": "^5.1.9"
   }
 }
